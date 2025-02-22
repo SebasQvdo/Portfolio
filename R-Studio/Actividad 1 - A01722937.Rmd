@@ -1,0 +1,79 @@
+---
+title: "1.1 Actividad - Estadística"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-09-18"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Números Impares
+
+## Problema 1:
+```{r}
+pCafe = 55
+pRefresco = 45
+pUnion = 70
+
+# a)
+pIntersección = pCafe + pRefresco - pUnion
+cat('a) La probabilidad que tome café y soda:', pIntersección, '%')
+
+# b)
+pComplemento = pCafe + pRefresco - pUnion
+cat('\n\nb) La probabilidad que no tome café o soda:', pComplemento, '%')
+
+# c)
+pSoloCafe = pCafe - pIntersección
+cat('\n\nc) La probabilidad que solo tome café:', pSoloCafe, '%')
+```
+
+
+## Problema 3:
+```{r}
+CondicionesInseguras_Diurno = 22
+CondicionesInseguras_Mixto = 18
+CondicionesInseguras_Nocturno = 13
+NoVinculadasALasCondiciones_Diurno = 72
+NoVinculadasALasCondiciones_Mixto = 42
+NoVinculadasALasCondiciones_Nocturno = 53
+Total = 220
+
+# a)
+pInseguro_Nocturno = round(CondicionesInseguras_Nocturno / Total, digits = 4) * 100
+cat('a) Probabilidad de incidente por condiciones inseguras en el turno nocturno:', pInseguro_Nocturno, '%')
+
+# b)
+pNoRelacionadoACondiciones = round((NoVinculadasALasCondiciones_Diurno + NoVinculadasALasCondiciones_Mixto + NoVinculadasALasCondiciones_Nocturno) / Total, digits = 4) * 100
+cat('\n\nb) Probabilidad que el incidente no es relacionado con las condiciones:', pNoRelacionadoACondiciones, '%')
+
+# c)
+pInseguro_SiNocturno = round(CondicionesInseguras_Nocturno / (CondicionesInseguras_Nocturno + NoVinculadasALasCondiciones_Nocturno), digits = 4) * 100
+cat('\n\nc) Probabilidad que en el turno nocturno hubo incidente relacionado con las condiciones:', pInseguro_SiNocturno, '%')
+```
+
+
+## Problema 5:
+Demuestra: P(A ∪ B ∪ C) = P(A) + P(B) + P(C) - P(A ∩ B) - P(A ∩ C) - P(B ∩ C) + P(A ∩ B ∩ C)
+
+P(A ∪ B ∪ C) = P(A) + P(B ∪ C) - P(A ∩ (B ∪ C))
+
+P(B ∪ C):
+= P(B) + P(C) - P(B ∩ C)
+
+P(A ∪ B ∪ C) = P(A) + P(B) + P(C) - P(B ∩ C) - P(A ∩ (B ∪ C))
+
+P(A ∩ (B ∪ C)):
+= P(A ∩ B) + P(A ∩ C) − P(A ∩ B ∩ C)
+
+P(A ∪ B ∪ C) = P(A) + P(B) + P(C) - P(B ∩ C) - (P(A ∩ B) + P(A ∩ C) − P(A ∩ B ∩ C))
+                                        v
+P(A ∪ B ∪ C) = P(A) + P(B) + P(C) - P(B ∩ C) - P(A ∩ B) - P(A ∩ C) + P(A ∩ B ∩ C)
+
+
+
+
+
+

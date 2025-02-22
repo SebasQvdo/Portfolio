@@ -1,0 +1,57 @@
+---
+title: "Actividad 7"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-06-04"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# EL problema de la súper carretera
+
+## Hipótesis
+Ho: Media_pobl = 42
+H1: Media_pobl < 42
+alfa = 0.01
+
+$H_o: \mu = 42$
+$H_1: \mu < 42$
+$\alpha = 0.01$
+
+## Regla de decisión
+Modelo a usar: Z porque $\sigma$ es desconocida, pero n > 30
+**Regla valor p**: Si valor p < alfa = 0.01 se rechaza Ho.
+**Regla clásica con Z**:
+```{r}
+vf = qnorm(0.01) # todo el alfa se va a izquierda porque H1: <
+cat("El valor frontera es:", vf, "\n")
+cat("Regla: Si Z* <", vf, "se rechaza Ho")
+```
+## Estadístico de prueba Z* (Zp)
+```{r}
+media_muestra = 39.1
+media_pobl = 42
+desv = 5.2 # desviación estándar de muestra
+n = 35
+Zp = (media_muestra - media_pobl) / (desv / sqrt(n)) # se usa 's' en lugar de sigma porque no se conoce sigma y 'n' es granda
+Zp
+```
+## Conclusión
+Como Z* = -3.29 < vf = -2.32, entonces Z* está en zona extrema (de rechazo). Por tanto, se rechaza Ho.
+
+# Valor p
+```{r}
+cat("El valor p =", pnorm(Zp))
+```
+Como valor p = 0.0004 < alfa = 0.01, se rechaza Ho.
+
+
+
+
+
+
+
+
+

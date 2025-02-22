@@ -1,0 +1,94 @@
+---
+title: "Actividad de la clase 8 - a01708119"
+author: "Erick Alfredo Garcia Huerta - A01708119"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Situación problema
+
+## Los datos
+
+```{r}
+M = read.csv("./datosG10Eq04.csv")
+```
+
+## Descripción de la base de datos
+```{r}
+str(M)
+```
+
+Se trata de 126 observaciones (filas) con 22 columnas (variables)
+
+Se observan una variable categórica (entidad) y el resto numérica sin contar x
+
+¿Qué vamos a investigar?
+Energías fósil vs PIB per cápita
+
+```{r}
+names(M)
+M2 = M[ , c(2, 5, 9, 11, 12, 18, 20)] # COndición filas, condición columnas (si con ,)
+```
+
+## Regiones de la base de datos
+```{r}
+#table(M2$entidad)
+Oriente = c("Bulgaria", "Hungary", "Latvia")
+region = ifelse(M2$entidad %in% Oriente, "R1", "R2")
+M2 = cbind(region, M2)
+#names(M2)
+M3 = M2[-2] # Quita la columna 2
+names(M3)
+```
+```{r}
+R1 = M3[M3$region == "R1", ][-1]
+R2 = M3[M3$region == "R2", ][-1]
+```
+
+# Análisis de medidas resumen de R1, R2
+```{r}
+cat("Región 1 \n")
+summary(R1)
+cat("Región 2 \n")
+summary(R2)
+```
+## Gráficas
+```{r}
+par(cex = 0.7) # disminuye la letra de las etiquetas
+par(las = 3) # voltear las etiquetas
+boxplot(R1[1:4], main = "R1", col = rainbow(8))
+plot(R1, col = "blue")
+par(mfrow = c(2, 3)) # matriz graficos 3 filas, 2 columnas
+hist(R1$acceso_combust_limpios, col = "red")
+hist(R1$electrd_fosiles, col = "green")
+hist(R1$electrd_de_energ_renov, col = "yellow")
+hist(R1$electrd_de_f_bajas_carb, col = "pink")
+hist(R1$PIB_per_cap, col = "purple")
+hist(R1$superficie, col = "black")
+```
+```{r}
+par(cex = 0.7) # disminuye la letra de las etiquetas
+par(las = 3) # voltear las etiquetas
+boxplot(R2[1:4], main = "R2", col = rainbow(8))
+plot(R2, col = "blue")
+par(mfrow = c(2, 3)) # matriz graficos 3 filas, 2 columnas
+hist(R2$acceso_combust_limpios, col = "red")
+hist(R2$electrd_fosiles, col = "green")
+hist(R2$electrd_de_energ_renov, col = "yellow")
+hist(R2$electrd_de_f_bajas_carb, col = "pink")
+hist(R2$PIB_per_cap, col = "purple")
+hist(R2$superficie, col = "black")
+```
+
+## Matriz de correlaciones
+```{r}
+cat("Región 1\n")
+round(cor(R1), 2)
+cat("Región 2\n")
+round(cor(R2), 2)
+```
+# Reporte

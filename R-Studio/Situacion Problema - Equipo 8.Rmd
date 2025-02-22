@@ -1,0 +1,61 @@
+---
+title: "Situación Problema - MA1036"
+author: "Equipo 8"
+date: "2024-08-28"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+datos = read.csv("Datos SP2023.csv")
+```
+
+
+## 1) A partir de la matriz de datos genera la matriz de la matriz S de varianzas y covarianzas.
+```{r}
+# Se calcula la varianza y covarianza entre vectores o columnas de matrices.
+matrizS = cov(datos)
+cat("Matriz S de Varianzas y Covarianzas:\n", matrizS)
+```
+
+
+## 2) Determina los valores y vectores propios de la matriz S.
+```{r}
+# Genera los valores eigen, los valores y vectores propios (eigenvalues, eigenvectors)
+eigen = eigen(matrizS)
+eigen
+valPropios = eigen$values
+vecPropios = eigen$vectors
+cat("Valores Propios:\n", valPropios, "\n")
+cat("Vectores Propios:\n", vecPropios)
+```
+
+
+## 3) Localiza el mayor de los valores propios y el vector propio asociado.
+```{r}
+maxVal = max(valPropios)
+# Determinar el lugar en la matriz con el mayor valor numérico
+indiceMax = which.max(maxVal)
+vecAsociado = vecPropios[ , indiceMax]
+cat("Mayor valor propio:", maxVal, "\n")
+cat("Vector propio asociado:\n", vecAsociado)
+```
+
+
+## 4) Ordena las entradas de este vector de mayor a menor, para jerarquizar el rendimiento de los empleados también de mayor a menor.
+```{r}
+# El vector se ordena de mayor a menor, sin embargo, este ya estaba ordenado entonces no hay cambio
+vecOrdenado = sort(vecAsociado, decreasing = TRUE)
+cat("Vector propio ordenado:\n", vecOrdenado)
+```
+
+
+## 5) De acuerdo con la jerarquía anterior, indica para cada caso cuál es el factor que tuvo mayor peso en el rendimiento de cada empleado.
+```{r}
+## Ya quedó hecho
+```
+

@@ -1,0 +1,28 @@
+---
+title: "Actividad 1 - Análisis Estadístico"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-05-14"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mi Primera Gráfica
+
+```{r}
+boxplot(iris, col = "turquoise", main = "Datos de IRIS", horizontal = TRUE)
+```
+
+
+# El problema del promedio
+
+```{r}
+x = c(rep(7000, 50), rep(25000, 35), rep(60000, 6), 100000)
+mean(x)
+```
+
+
+
+

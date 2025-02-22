@@ -1,0 +1,59 @@
+---
+title: "Actividad 2 - Análisis Estadístico"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-05-17"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problema 1
+
+```{r}
+salarios = c(7000, 25000, 60000, 100000)
+peso = c(50, 35, 16, 1)
+
+# Usando la media ponderada:
+media = sum(salarios * peso / sum(peso))
+cat("Media =", media)
+
+moda = 7000
+cat("\nModa =", moda)
+
+cat("\nMediana =", 25000)
+
+rango = sum(range(salarios)) / 2
+cat("\nRango Medio =", rango)
+```
+
+
+# Leyendo una base de datos y su resumen de medidas
+
+```{r}
+datos = read.csv("energiafosil_PIB.csv")
+str(datos)
+```
+
+Se trata de una variable categórica (entidad) y tres variables numéricas.
+
+
+# Medidas resumen
+
+```{r}
+summary(datos)
+cat("\nDesviaciones estándar: \n")
+apply(datos[-1], 2, sd)
+```
+
+
+
+
+
+
+
+
+
+
+

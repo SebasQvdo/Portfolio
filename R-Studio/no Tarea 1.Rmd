@@ -1,0 +1,113 @@
+---
+title: "Tarea 1"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-06-05"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problema 1
+```{r}
+Pa = 0.18
+Pb = 0.33
+Pab = 0.10
+
+cat("a)", Pab/Pb)
+cat("\nb)", Pab/Pa)
+cat("\nc)", Pa*(1-Pb))
+cat("\nd)", Pb*(1-Pa))
+cat("\ne)", (1-Pa)*(1-Pb))
+```
+
+## Problema 2
+```{r}
+Fuma_Hombre = 200
+Fuma_Mujer = 80
+NoFuma_Hombre = 135
+NoFuma_Mujer = 238
+
+cat("a)", Fuma_Mujer/(Fuma_Mujer+Fuma_Hombre))
+cat("\nb)", Fuma_Mujer/(Fuma_Mujer+Fuma_Hombre+NoFuma_Hombre+NoFuma_Mujer))
+cat("\nc)", NoFuma_Mujer/(Fuma_Mujer+NoFuma_Mujer))
+cat("\nd)", (Fuma_Mujer+NoFuma_Hombre+NoFuma_Mujer)/(Fuma_Mujer+Fuma_Hombre+NoFuma_Hombre+NoFuma_Mujer))
+```
+
+## Problema 3
+```{r}
+billetes = c(rep(100, 24), rep(200, 10), rep(500, 12), rep(1000, 19))
+C = 24/length(billetes)
+D = 10/length(billetes)
+Q = 12/length(billetes)
+M = 19/length(billetes)
+
+cat("Respuesta:", 12/64)
+```
+
+## Problema 4
+```{r}
+billetes = c(rep(100, 23), rep(200, 15), rep(500, 19), rep(1000, 21))
+C = 23/length(billetes)
+D = 15/length(billetes)
+Q = 19/length(billetes)
+M = 21/length(billetes)
+
+cat("Respuesta:", Q*M)
+```
+
+## Problema 5
+```{r}
+A_Probabilidad = 0.03
+B_Probabilidad = 0.004
+C_Probabilidad = 0.02
+A_Proporcion = 0.34
+B_Proporcion = 0.31
+C_Proporcion = 0.35
+
+cat("a)", 100000 * 2.9 * (A_Probabilidad*A_Proporcion+B_Probabilidad*B_Proporcion+C_Probabilidad*C_Proporcion))
+cat("\nb)", B_Proporcion*B_Probabilidad)
+
+```
+
+## Problema 6
+```{r}
+
+```
+
+## Problema 7
+```{r}
+
+```
+
+## Problema 8
+```{r}
+
+```
+
+## Problema 9
+```{r}
+
+```
+
+## Problema 10
+```{r}
+
+```
+
+## Problema 11
+```{r}
+
+```
+
+## Problema 12
+```{r}
+
+```
+
+## Problema 13
+```{r}
+
+```
+

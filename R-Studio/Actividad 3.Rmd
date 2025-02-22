@@ -1,0 +1,143 @@
+---
+title: "Actividad 3 - Análisis Estadístico"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-05-21"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Los datos
+
+```{r}
+# Leer archivo de datos
+M = read.csv("energiafosil_PIB.csv")
+# head(M) para visualizarlo
+
+t = table(M$entidad) #Tabla sobre los países en la tabla de datos
+length(t) # La longitud de la tabla que clasifica los países
+
+names(M) # El nombre de las variables dentro de la base de datos
+```
+
+Se observa que hay 161 países en la variable entidad.
+
+Dos filtros:
+M1 será la base de datos con variables numéricas exclusivamente.
+M2 = la base de datos con los 5 países
+
+Filtro de los 5 países:
+
+```{r}
+# [condiciones renglones, condiciones columnas] y dentro de las condiciones, '|' significa 'or'
+M2 = M[M$entidad == "Mexico" | M$entidad == "Argentina" | M$entidad == "Costa Rica" | M$entidad == "Chile" | M$entidad == "Spain", ]
+
+table(M2$entidad) # Verificar nuestra nueva tabla de datos
+```
+
+
+Ahora haremos un filtro con M2, pero con sólo variables numéricas.
+
+```{r}
+# M1 = M2[c(2, 3, 4)] # M1 es de sólo variables numéricas
+# head(M1)
+
+# El de arriba y abajo hacen lo mismo
+
+M1 = M2[-1]
+head(M1)
+```
+
+
+# Análisis de las variables categóricas de la base de datos M2 (la de los 5 países)
+
+```{r}
+T = prop.table(table(M2$entidad)) # te pasa la proporción
+T
+```
+
+Se observa que los datos se distribuyen uniformemente en los 5 países (20%).
+
+
+```{r}
+# Es un controlador de gráficos para que se puedan imprimir mejor al exportar
+par(mfrow = c(1, 2))
+# 'c' hace una matriz de gráficos (fila, columna)
+
+# Gráfico pie para la distribución de los datos de una tabla
+pie(T)
+
+par(cex = 0.7)
+# Gráfica de barras para igualmente visualizar la distribución de datos
+barplot(T, col = rainbow(5), las = 2)
+# 'las' gira los títulos, 'cex' reduce o aumenta el título
+```
+
+
+## Análisis de las variables numéricas
+
+Tabla de medidas resumen
+
+```{r}
+summary(M1) # Te da la análisis de los valores de los datos en la tabla
+
+cat("Las desviaciones estándar son:\n")
+apply(M1, 2, sd) # 'sd' es la desviación estándar
+
+# Función para obtener la varianza en la media
+CV = function(x) sd(x) / mean(x)
+cat("Los coeficientes de variación son:\n")
+apply(M1, 2, CV)
+```
+
+
+## Matriz de gráficos histogramas
+
+```{r}
+par(mfrow = c(1, 3)) # 1 renglón, 3 columnas
+
+par(cex = 0.7)
+
+# 'main' es el título
+hist(M1$electrd_fosiles, main = "Fósil", col = rainbow(10), las = 2)
+hist(M1$PIB_per_cap, main = "PIB", col = terrain.colors(10), las = 2)
+hist(M1$emisiones_CO2, main = "co2", col = cm.colors(10), las = 2)
+# signo '$' es para acceder al nombre de la variable
+```
+
+
+# Diagrama de caja y bigote de M1
+
+```{r}
+# boxplot(M1, horizontal = TRUE, col = "red")
+
+boxplot(scale(M1), horizontal = TRUE, col = "red")
+# 'scale' escala los datos (estandarizar: (x - media)/desv) (solo se usa cuando las escalas originales son muy diferentes y desproporcionados)
+```
+
+
+## Matriz de gráficos de dispersión de las variables numéricas
+
+```{r}
+plot(M1, pch = 20, col = "orange")
+# 'pch' hace el puntito más delgadito
+```
+
+
+## Matriz de correlaciones
+
+```{r}
+cor(M1)
+```
+
+Se puede observar que hay una alta correlación entre el PIB y las emisiones de co2, significando que los países con mayor producto interno bruto, generan más emisiones de dióxido de carbono.
+
+
+
+
+

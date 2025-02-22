@@ -1,0 +1,136 @@
+---
+title: "Examen Argumentativo"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-06-14"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problema 1:
+
+```{r}
+prob_pedidos = 0.34
+clientes = 30
+
+min_pedidos = 10
+
+prob_que_si = (min_pedidos / clientes) / prob_pedidos
+cat("Respuesta:", prob_que_si)
+```
+
+## Problema 2:
+
+```{r}
+media = 5
+desv = 0.51
+
+peso_min = 1 - pnorm(4.1, media, desv)
+cat("a)",peso_min)
+
+peso_30_porciento = qnorm(0.30, media, desv)
+cat("\nb)",peso_30_porciento)
+```
+
+
+## Problema 3:
+
+```{r}
+media = 70
+desv = 1.6
+n = 16
+
+centrado = pnorm(70, media, desv)
+cat("a)",media)
+
+cat("\nb)",desv)
+
+cat("\nc) T Student porque se distribuye normalmente y es una muestra pequeña")
+
+media_nueva = 69.5
+error_estandar = desv/sqrt(n)
+Z = (media - media_nueva) / error_estandar
+cat("\nd)",pnorm(Z))
+```
+
+
+## Problema 4:
+Ho = 30
+H1 < 30
+```{r}
+media_pobl = 30
+n = 15
+muestra = c(27.2, 31.1, 29.0, 26.7, 28.1, 27.3, 29.6, 30.5, 30.0, 30.2, 25.9, 31.3, 28.8, 27.4, 27.0)
+media = mean(muestra)
+desv = sd(muestra)
+confianza = 0.90
+alfa = (1-confianza) / 2
+error_estandar = desv/sqrt(n)
+#T_ = (media - media_pobl) / error_estandar
+#area_izq = pnorm(T_)
+t = qt(alfa, n-1)
+#Pt = pt(t, n-1)
+#t = qt(T_,n-1)
+T_Student = t * error_estandar
+cat("Respuesta:", media + T_Student, "a", media - T_Student)
+```
+
+
+## Problema 5:
+Ho = 32.1
+H1 = 31.2
+```{r}
+media_pobl = 32.1
+n = 42
+media = 31.2
+desv = 2.1
+alfa = 0.05
+error_estandar = desv/sqrt(n)
+Z = (media - media_pobl) / error_estandar
+#media1 = media + Z*error_estandar
+#media2 = media - Z*error_estandar
+valor_p = pnorm(Z)
+cat("Valor p =", valor_p, "<", "alfa =", alfa, "\nEntonces se rechaza Ho.")
+```
+
+
+## Problema 6:
+
+```{r}
+muestra_x = c(1.1, 0.64, 0.32, 1.10, 0.62, 0.31, 1.10, 0.62, 0.31, 1.10, 0.62, 0.31)
+muestra_y = c(0.227, 0.101, 0.055, 0.129, 0.069, 0.030, 1.005, 0.559, 0.321, 2.948, 1.633, 0.934)
+
+regresion = lm(muestra_y ~ muestra_x)
+regresion
+z1 = muestra_x
+z2 = z1^2
+regresion2 = lm(muestra_y ~ z1 + z2)
+regresion2
+
+plot(muestra_x, muestra_y, main = "Regresión Lineal", ylab = "densidad óptica", xlab = "espesor de película", col = 2)
+abline(regresion)
+x2 = seq(min(muestra_x), max(muestra_x), 0.1)
+y2 = 0.1669 - 0.4589*x2 + 0.3339*(x2^2)  #según haya salido el modelo cuadrático
+lines(x2, y2, col = "blue")
+
+plot(regresion$fitted.values, regresion$residuals, pch = 20, col = "red", main = "Grafico de Residuos vs 'y' estimadas en modelo lineal", xlab = "Y estimada", ylab = "Residuos")
+abline(h = 0, lty = 5)
+plot(regresion2$fitted.values, regresion2$residuals, pch = 20, col = "red", main = "Grafico de Residuos vs 'y' estimadas en modelo cuadrático", xlab = "Y estimada", ylab = "Residuos")
+abline(h = 0, lty = 5)
+summary(regresion)
+summary(regresion2)
+
+library(lmtest)
+bptest(muestra_y ~ muestra_x)
+cat("\n**\nNo se rechaza Ho, significando que tienen homocedasticidad\n**")
+```
+
+Aquí podemos determinar que ambos modelos sufren de el mismo R^2 de 0.13, cual no es nada bueno para un modelo de regresión, esto significa que los datos están tan espaciados y variados que no se puede determinar una linea correcta que pueda juntarlos con un patrón específico. Vemos que aunque el modelo cuadrático es más avanzado, el modelo lineal sigue siendo igual de homocedástico, viendo el gráfico de residuos. Aún, haciendo la prueba Breuch-Pagan, los gráficos tienen un valor p mayor a 0.05, cual no se rechaza Ho y siguen siendo homocedásticos.
+
+
+
+
+
+

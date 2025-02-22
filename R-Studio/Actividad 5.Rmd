@@ -1,0 +1,57 @@
+---
+title: "Actividad 5"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-05-28"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Sobre el teorema de Bayes
+Se trata de una condicional sobre una probabilidad total.
+```{r}
+F1 = 0.25 # probabilidad de ser de la fábrica 1
+F2 = 0.60
+F3 = 0.15
+M_dado_F1 = 0.01
+M_dado_F2 = 0.05
+M_dado_F3 = 0.02
+M = F1*M_dado_F1 + F2*M_dado_F2 + F3*M_dado_F3
+cat('La probabilidad total de estar mal etiquetado es:', M)
+```
+
+```{r}
+cat('P(F1 | M) =', F1*M_dado_F1 / M)
+```
+Del 100% de los zapatos mal etiquetados, el 7% origina de la fábrica 1.
+De cada 100 pares de zapatos mal etiquetados se espera (promedio) que 7 provengan de la fábrica 1.
+
+
+## El problema del basquetbolista
+```{r}
+p = 0.4 # probabilidad de lanzar una vez la pelota y fallar.
+q = 1 - p
+n = 20
+# P(va al torneo) = P(falla 6 o menos) = P(X=0) + P(X=1) + ... + P(X=6)
+# por ejemplo, ( (20C0) * 0.4^0 * 0.6^20 [este ejemplo significa que acierta todos] ) + ...
+cat('P(vaya al torneo) = ', sum(dbinom(0:6, 20, 0.4))) # dbinom(X=x, n, p)
+```
+La regla del entrenador en injusta. Porque le pide un número de encestes más allá de lo esperado.
+
+
+## Gráfica de la binomial
+```{r}
+x = 0:20
+y = dbinom(x, n, p)
+plot(x, y, main = "Distribución binomial (n = 20, p = 0.4)", xlab = "Número de fallos", ylab = "Probabilidad exacta", pch = 19 , col = terrain.colors(21)) # pch llena los circulos del plot
+abline(v = 6, lty = 5, col = "blue") # Línea separando el éxito contra los fallados
+text(2, 0.05, "va al torneo") # text(x1, y1, texto)
+```
+
+
+
+
+
+

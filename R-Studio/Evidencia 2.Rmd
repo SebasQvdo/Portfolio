@@ -1,0 +1,221 @@
+---
+title: "Evidencia 2"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-06-11"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Situación Problema - Fuentes de Energía para Obtener Electricidad
+
+## Introducción
+Las energías verdes, también conocidas como energías renovables, son aquellas que se obtienen de fuentes naturales virtualmente inagotables, ya sea por la inmensa cantidad de energía que contienen o porque son capaces de regenerarse por medios naturales. A diferencia de los combustibles fósiles, cuya quema libera gases de efecto invernadero y contribuye al cambio climático, las energías verdes son consideradas limpias y sostenibles.
+
+## Metodología
+Los datos provienen de una base de datos muy amplia que explica las diferentes características de ciertos países, cual en este caso son 6 países, mayormente de Europa y el Oriente. Éstos datos contienen la información relevante hacia la producción y la escala de un país debido a sus diferentes factores como área superficial, generación de electricidad de cualquier tipo, acceso y el porcentaje de electricidad usado en ese país, su producto interno bruto más su crecimiento, entre otros más que se pueden observar debajo.
+```{r}
+M = read.csv("datosG10Eq04.csv")
+names(M)
+```
+
+```{r}
+str(M)
+```
+Se trata de 126 observaciones (renglones) con 22 variables (columnas)
+Se observa una variable categórica (entidad) y el resto numéricas (sin contar X)
+
+
+# Selección de variables del equipo
+Se escogieron y se dividieron las variables entidad como una sección entre el oeste y el este, mas 3 variables de energía (acceso_combust_limpios, electrd_fosiles, electrd_de_energ_renov, electrd_de_f_bajas_carb, renovables), unas variables ecológicas (acceso_combust_limpios, electrd_de_energ_renov, renovables) y una geográfica (superficie).
+
+## Descripción de la base datos
+Vamos a investigar la correlación de los países con alto indice de energías renovables, comparado con su uso en energías no renovables o dañantes para el ambiente.
+Especialmente: Emisiones CO2 vs Energías Renovables
+
+Seleccionar las variables:
+```{r}
+M2 = M[c(2, 5, 9, 11, 12, 15, 16, 17, 18, 20) ]
+M2 = na.omit(M2)
+names(M2)
+```
+
+
+# Las regiones del equipo
+```{r}
+table(M2$entidad)
+```
+En este caso tres países anteriores pertenen a la región de Europa Occidental y los demás a Europa Oriental. 
+
+
+## Regiones de la base de datos
+Se añade una nueva variable "region" en nuestra base de datos:
+```{r}
+Europa_Occidental = c("France", "Austria", "Finland")
+region = ifelse(M2$entidad %in% Europa_Occidental, "R1", "R2")
+M2 = cbind(region, M2)
+names(M2)
+```
+
+
+## Bases de datos por región 1 (R1) y región 2 (R2)
+```{r}
+R1 = M2[M2$region =="R1", ]
+R2 = M2[M2$region =="R2", ]
+cat("REGION 1 \n")
+names(R1)
+cat("\nREGION 2\n")
+names(R2)
+```
+
+
+## Bases de datos R1, R2 numéricas
+Se observa que R1, R2 contienen algunas variables categóricas que no serán usadas para el análisis y estorban, así que las eliminaremos.
+```{r}
+R1 = R1[-1:-2]
+R2 = R2[-1:-2]
+cat("REGION 1 \n")
+names(R1)
+cat("\nREGION 2\n")
+names(R2)
+```
+Hasta aquí ya están listas las bases de datos para el análisis de medidas resumen y gráficos de Regresión lineal.
+
+
+# Regresión lineal
+
+## Matriz de correlaciones de R1 y R2
+```{r}
+round(cor(R1), 2)
+```
+Las variables con mayor correlación que al igual se relacionan en contexto son:
+superfecie vs renovables
+emisiones_CO2 vs electrd_fosiles
+electrd_fosiles vs renovables
+emisiones_CO2 vs renovables
+
+
+## Análisis de Regresión linea de electrd_fosiles vs acceso_combust_limpios
+```{r}
+options(scipen = 50)
+y = R1$emisiones_CO2
+x = R1$renovables
+
+regresion = lm(y ~ x)
+regresion
+plot(x,y, pch = 20, col = 2, main = "Modelo de regresión lineal simple", ylab = "emisiones CO2 (t)", xlab = "% de energías renovables")
+abline(regresion)
+```
+El modelo es: y = 388907 - 11,156x
+
+
+## Datos generales del modelo
+```{r}
+summary(regresion)
+```
+Como el valor p de bo es <2e-16, se rechaza Ho. Por tanto, bo se queda dentro del modelo. 
+
+Como el valor p de b1 es <2e-16, se rechaza Ho. Por tanto, b1 se queda dentro del modelo.
+
+Como R2 = 0.7324 significa que el 73.24% de la variación total queda explicado por el modelo. 
+
+
+
+## Análisis de residuos
+
+### Media cero de los residuales
+$H_o: \mu_{residuos} = 0$  
+$H_1: \mu_{residuos} \neq 0$  
+$\alpha = 0.05$  
+
+Prueba T para medias: 
+```{r}
+t.test(regresion$residuals)
+```
+Como valor p = 1 > alfa = 0.05, entonces no se rechaza Ho. 
+
+
+## Gráfica residuales vs y estimadas
+```{r}
+plot(regresion$fitted.values, regresion$residuals, pch = 20, col = "red", main = "Grafico de Residuos vs y estimadas por el modelo", xlab = "Y estimada", ylab = "Residuos")
+abline(h = 0, lty = 5)
+```
+Se observa que no hay homocedasticidad en los datos. 
+Además, se puede decir que los residuales no tienen tendencia. Esto no favorece al modelo. 
+
+
+## Prueba de Breuch-Pagan para homocedasticidad: 
+Ho: Los residuos tienen homocedasticidad (igual varianza)
+H1: Los residuos no son homocedásticos (son heterocedásticos)
+alfa: 0.05
+```{r, message=FALSE}
+library(lmtest)
+bptest(y ~ x)
+```
+Como el valor p = 0.4478 > alfa = 0.05, entonces no se rechaza Ho. Este resultado favorece al modelo. 
+
+
+## Prueba de normalidad de los residuos
+
+### Qqplot
+```{r}
+qqnorm(regresion$residuals, pch =20, col= "blue")
+qqline(regresion$residuals, col ="red")
+```
+Según este gráfico, se puede concluir que los datos no se distribuyen normalmente porque hay mucha varianza entre el modelo y la dispersión de los puntos.
+
+
+**Prueba de normalidad**  
+Ho: Los datos provienen de población normal  
+H1: Los datos no provienen de población normal  
+alfa: 0.05
+```{r}
+shapiro.test(regresion$residuals)
+```
+Como valor p = 3.628e-6 es menor que alfa = 0.05, se rechaza Ho. Esto quiere decir que los datos de los residuos no provienen de una población normal. 
+
+
+# Modelo curvilíneo
+```{r}
+z1 = R1$renovables
+z2 = z1^2
+y = R1$emisiones_CO2
+regresion2 = lm(y ~ z1 + z2)
+regresion2
+summary(regresion2)
+```
+El modelo es: y = 624,565.6 - 42,006x + 751.9x^2
+donde y = emisiones de CO2, x = energías renovables
+
+
+# Gráfico
+```{r}
+y = R1$emisiones_CO2
+x = R1$renovables
+plot(x, y, main = "Comparación de modelos", xlab = "porcentaje de energías renovables", ylab = "emisiones CO2 (t)")
+abline(regresion, col = "red")
+x2 = seq(min(x), max(x), 0.1)
+y2 = 624565.6 - 42006*x2 + 751.9*(x2^2)
+lines(x2, y2, col = "blue")
+```
+En este caso, el mejor modelo resulta ser el modelo cuadrático porque el coeficiente de determinación del modelo cuadrático es mucho mayor (casi 1), como se puede ver en el gráfica anterior. Además, este fue intentado con un modelo logarítmico; no obstante, el modelo cuadrático siguió siendo más eficiente y más preciso, teniendo un mayor porcentaje de variación total que está explicado por el modelo.
+
+## Conclusión
+A través de los resultados obtenidos y las observaciones de la gráfica, se puede concluir que el modelo cuadrático enseña mucho mejor la distribución de los datos y su tendencia. Entonces podemos ver como los países con un menor índice de energías renovables debido a su consumo total de energía, termina emitiendo aproximadamente mayor a 500% de gases de dioxido de carbono, esto es en comparación contra los países que han sustituído al menos 20% de su energía total como fuentes renovables de energía. Lo cual enseña que un pequeño cambio hacia energías renovables termina creando un impacto inmenso hacia el ambiente y al igual la sociedad.
+
+Esta conclusión apoya como el uso de energías verdes tiene múltiples beneficios, tanto ambientales como económicos. Reduce la dependencia de los combustibles fósiles, disminuye las emisiones contaminantes, crea empleos locales y promueve la innovación tecnológica. Además, a medida que la tecnología avanza, los costos de producción de las energías verdes disminuyen, haciéndolas cada vez más competitivas frente a las fuentes convencionales.
+
+## Bibliografía
+BBVA (S.f) La energía verde y sus ventajas: limpia, renovable y sostenible. https://www.bbva.com/es/sostenibilidad/limpia-renovable-y-sostenible-que-es-y-que-ventajas-tiene-la-energia-verde/
+
+ONU (S.f). ¿Qué son las energías renovables? https://www.un.org/es/climatechange/what-is-renewable-energy#:~:text=Las%20energ%C3%ADas%20renovables%20son%20un,estas%20fuentes%20se%20renuevan%20continuamente
+
+
+
+
+
+
+
+

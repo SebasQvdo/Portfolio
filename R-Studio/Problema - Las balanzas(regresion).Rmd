@@ -1,0 +1,127 @@
+---
+title: "El caso de las balanzas"
+author: "Armando Albert"
+date: "2024-06-11"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## El problema
+Metrix, Inc.  es un fabricante de balanzas industriales y de equipo para laboratorio. Los gerentes de Reynolds desean investigar la relación que existe entre la antigüedad de sus vendedores y el número de balanzas electrónicas para laboratorio que venden para elaborar un plan de estímulos. ¿Es posible que exista una relación entre antigüedad de un empleado y número de balanzas que vende? 
+
+## Los datos
+```{r}
+A = c(41, 106, 76, 100, 22, 12, 85, 111, 40, 51, 9, 12, 6, 56, 19)
+V = c(375, 296, 317, 376, 162, 150, 367, 308, 189, 235, 83, 112, 67, 325, 189)
+plot(A, V, pch = 19, col = 2, main ="Las Balanzas", ylab = "Vendido", xlab = "Antigüedad")
+abline(lm(V~A), col = 3)
+```
+
+## El modelo lineal
+```{r}
+regresion = lm(V ~ A)
+cat("V =", regresion$coefficients[1], "+", regresion$coefficients[2], "A")
+```
+# Validación del modelo
+## Betas i significativas
+Ho: Beta0 = 0  
+H1: Beta0 != 0  
+alfa = 0.05  
+
+Ho: Beta1 = 0  
+H1: Beta1 != 0  
+alfa = 0.05  
+
+Regla de decisión: Si valor p < alfa = 0.05, se rechaza Ho. 
+
+
+```{r}
+summary(regresion)
+```
+Como el valor p de beta 0 es 0.001023 < alfa --> se rechaza Ho. bo es significativamente diferente de 0. 
+Lo mismo para para b1 porque su valor p = 0.0002 < alfa.
+Tanto b0, como b1 se quedan en el modelo por ser significativamente diferentes de 0. 
+
+## Residuos de media 0
+Ho:    (ver en presentaciones de la clase)  
+H1:       
+alfa = 0.05  
+```{r}
+alfa = 0.05
+P = t.test(regresion$residuals)
+cat("El valor p = ", P$p.value)
+```
+Como el valor p =1 >  alfa = 0.05, entonces no se rechaza Ho. 
+Por tanto, se mantiene que los residuales tienen media 0. 
+
+## Prueba de normalidad
+
+Ho:    (ver en presentaciones de la clase)  
+H1:   
+alfa = 0.05  
+### Prueba de normalidad de Shapiro-Wilk (para n <= 5000)
+```{r}
+shapiro.test(regresion$residuals)
+```
+Como el valor p = 0.1619 >  alfa = 0.05, entonces no se rechaza Ho. 
+Por tanto, se mantiene que los residuales provienen de una población normal.
+
+La prueba de **Anderson-Darling** también es muy citada. Recomendable para muestras grandes (n > 5000). Muchos artículos se investigación incluyen tanto la prueba de Shapiro, como Anderson.
+
+```{r}
+library(nortest)
+ad.test(regresion$residuals)
+```
+De manera similar, como el valor p = 0.36 > alfa = 0.05, no se rechaza Ho. Por tanto, se mantiene que los datos proceden de población normal. 
+
+
+## Homocedasticidad
+```{r}
+plot(regresion$fitted.values, regresion$residuals, pch = 20, col = 2, main = "Grafico Residuales vs Y estimada")
+abline(h = 0, lty = 5, col = 4)
+```
+
+Se observa una cierta tendencia cuadrática, no hay homocedaticidad a simple vista. Por otra parte, se tiene: 
+# Prueba de hocedasticidad Breuch-Pagan
+```{r}
+library(lmtest)
+bptest(V~A)
+```
+Conclusión: Como el valor p = 0.86 > alfa = 0.05, no se rechaza Ho, y se mantiene por cierta la hipótesis de homocedasticidad (misma varianza). 
+
+
+# Modelo cuadrático
+```{r}
+z1 = A
+z2 = A^2
+regresion2 = lm(V ~ z1 + z2)
+cat("El modelo es: V =", regresion2$coefficients[1], "+", regresion2$coefficients[2], "A + ", regresion2$coefficients[3], "A^2")
+summary(regresion2)
+```
+Se observa que todos los valores p son menores a alfa = 0.05, excepto el de bo que sale del modelo. Por tanto: 
+
+El modelo es: V = 7.301555 A +  -0.04340591 A^2
+
+## Gráfica
+```{r}
+plot(A, V)
+x = seq(min(A), max(A), .1)
+y = 7.301555*x +  -0.04340591*x^2
+abline(regresion, col = 2)
+lines(x,y, col = 4)
+```
+Se incrementó en un 16.4% la explicación total de la variación (porque el R^2 se incrementó)
+
+
+
+
+
+
+
+

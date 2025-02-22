@@ -1,0 +1,419 @@
+clc
+---
+title: "Exploración de Datos - Reto"
+author: "Equipo 6"
+date: "2024-09-25"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Datos del Cuestionario MOLEC
+```{r}
+M19 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Datos_molec_2019.csv")
+Dicc19 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Diccionario_molec_2019.csv")
+M20 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Datos_molec_2020.csv")
+Dicc20 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Diccionario_molec_2020.csv")
+M23 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Datos_molec_2023.csv")
+Dicc23 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Diccionario_molec_2023.csv")
+M24 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Datos_molec_2024.csv")
+Dicc24 = read.csv("C:/Users/Leonel Flores/Documents/RSTUDIO/Diccionario_molec_2024.csv")
+```
+
+## Estructura en 2019
+```{r}
+names(M19)
+```
+
+```{r}
+str(M19)
+```
+
+```{r}
+head(M19)
+```
+
+```{r}
+#View(M19)
+summary(M19)
+```
+
+## Estructura en 2020
+```{r}
+names(M20)
+```
+
+```{r}
+str(M20)
+```
+
+```{r}
+head(M20)
+```
+
+```{r}
+#View(M20)
+summary(M20)
+```
+
+
+## Estructura en 2023
+```{r}
+names(M23)
+```
+
+```{r}
+str(M23)
+```
+
+```{r}
+head(M23)
+```
+
+```{r}
+#View(M23)
+summary(M23)
+```
+
+
+## Estructura en 2024
+```{r}
+names(M23)
+```
+
+```{r}
+str(M23)
+```
+
+```{r}
+head(M23)
+```
+
+```{r}
+#View(M23)
+summary(M23)
+```
+
+
+## Separando las variables por año
+```{r}
+M19_2 = M19[c(11, 17, 18, 72, 79, 89) ]
+M19_2 = na.omit(M19_2)
+names(M19_2)
+M20_2 = M20[c(16, 22, 23, 77, 84, 94) ]
+M20_2 = na.omit(M20_2)
+names(M20_2)
+M23_2 = M23[c(16, 22, 23, 77, 84, 94) ]
+M23_2 = na.omit(M23_2)
+names(M23_2)
+M24_2 = M24[c(16, 22, 23, 77, 84, 94) ]
+M24_2 = na.omit(M24_2)
+names(M24_2)
+```
+
+
+## Explorando los datos por año
+```{r}
+cat('2019:\n\n',Dicc19[16,1])
+table(M19_2$p2)
+
+cat('\n\n', Dicc19[22,1])
+table(M19_2$p4)
+
+cat('\n\n', Dicc19[23,1])
+table(M19_2$p5)
+
+cat('\n\n', Dicc19[77,1])
+table(M19_2$p26)
+
+cat('\n\n', Dicc19[84,1])
+table(M19_2$p32)
+
+cat('\n\n', Dicc19[94,1])
+table(M19_2$p34_4)
+
+
+cat('\n\n2020:\n\n',Dicc20[16,1])
+table(M20_2$p2)
+
+cat('\n\n', Dicc20[22,1])
+table(M20_2$p4)
+
+cat('\n\n', Dicc20[23,1])
+table(M20_2$p5)
+
+cat('\n\n', Dicc20[77,1])
+table(M20_2$p26)
+
+cat('\n\n', Dicc20[84,1])
+table(M20_2$p32)
+
+cat('\n\n', Dicc20[94,1])
+table(M20_2$p34_4)
+
+
+cat('\n\n2023:\n\n',Dicc23[16,1])
+table(M23_2$p2)
+
+cat('\n\n', Dicc23[22,1])
+table(M23_2$p4)
+
+cat('\n\n', Dicc23[23,1])
+table(M23_2$p5)
+
+cat('\n\n', Dicc23[77,1])
+table(M23_2$p26)
+
+cat('\n\n', Dicc23[84,1])
+table(M23_2$p32)
+
+cat('\n\n', Dicc23[94,1])
+table(M23_2$p34_4)
+
+
+cat('\n\n2024:\n\n',Dicc24[16,1])
+table(M24_2$p2)
+
+cat('\n\n', Dicc24[22,1])
+table(M24_2$p4)
+
+cat('\n\n', Dicc24[23,1])
+table(M24_2$p5)
+
+cat('\n\n', Dicc24[77,1])
+table(M24_2$p26)
+
+cat('\n\n', Dicc24[84,1])
+table(M24_2$p32)
+
+cat('\n\n', Dicc24[94,1])
+table(M24_2$p34_4)
+```
+
+
+```{r}
+# Diccionario para las preguntas de las encuestas
+diccionario_respuestas <- list(
+  p2 = list(
+    pregunta = Dicc19[16,1],
+    respuestas = c("No respondió" = 0, "Sí" = 1, "No" = 2)
+  ),
+  p5 = list(
+    pregunta = Dicc19[23,1],
+    respuestas = c("No respondió" = 0, "Por trabajo" = 1, "Por estudio" = 2, "Por cultura general" = 3, "Por gusto o entretenimiento" = 4, "Por religión" = 5, "Otro" = 6)
+  ),
+  p32 = list(
+    pregunta = Dicc19[84,1],
+    respuestas = c("No respondió" = 0, "Falta de interés o gusto" = 1, "Preferencia de otras actividades" = 2, "Por falta de tiempo" = 3, "Por falta de dinero" = 4, "Por problemas de salud" = 5, "Otro" = 6)
+  ),
+  p34 = list(
+    pregunta = Dicc19[94,1],
+    respuestas = c("No respondió" = 0, "Sí" = 1, "No" = 2, "No lo recuerda" = 3)
+  )
+)
+
+# Función para mostrar los resultados de las encuestas con el diccionario
+mostrar_resultados <- function(pregunta_id, tabla_respuestas) {
+  pregunta <- diccionario_respuestas[[pregunta_id]]$pregunta
+  respuestas <- diccionario_respuestas[[pregunta_id]]$respuestas
+  cat('\n\n', pregunta, "\n\n")
+  
+  for (respuesta in names(respuestas)) {
+    valor <- respuestas[respuesta]
+    if (valor %in% names(tabla_respuestas)) {
+      cat(respuesta, ":", tabla_respuestas[as.character(valor)], "\n")
+    } else {
+      cat(respuesta, ": 0\n")
+    }
+  }
+}
+
+
+cat('\n\nDatos de 2019:\n\n')
+
+mostrar_resultados("p2", table(M19_2$p2))
+cat('\n\n',Dicc19[22,1],'\n\n')
+for (libros in names(table(M19_2$p4))) {
+  cat("Libros leídos:", libros, "->", table(M19_2$p4)[libros], "veces\n")
+}
+mostrar_resultados("p5", table(M19_2$p5))
+cat('\n\n',Dicc19[77,1],'\n\n')
+for (libros in names(table(M19_2$p26))) {
+  cat("Minutos leídos:", libros, "->", table(M19_2$p26)[libros], "veces\n")
+}
+mostrar_resultados("p32", table(M19_2$p32))
+mostrar_resultados("p34", table(M19_2$p34_4))
+
+
+```
+
+```{r}
+# Graficar la tabla de frecuencias
+
+barplot(height = rbind(table(M19_2$p2), table(M20_2$p2), table(M23_2$p2), table(M24_2$p2)),
+        beside = TRUE,
+        names.arg = c("No respondió", "Sí", "No"),
+        main = "¿Acostumbran leer?", 
+        xlab = "", 
+        ylab = "# Respuestas",
+        col = c("lightblue", "darkblue", "orange", "darkred"), 
+        border = "black",
+        legend.text = c("2019", "2020", "2023", "2024"),
+        args.legend = list(x = "topright"))
+
+barplot(height = rbind(table(M19_2$p4), table(M20_2$p4), table(M23_2$p4), table(M24_2$p4)),
+        beside = TRUE,
+        main = "Frecuencia de libros leídos", 
+        xlab = "Libros leídos", 
+        ylab = "Frecuencia",
+        col = c("lightblue", "darkblue", "orange", "darkred"), 
+        border = "black",
+        cex.names = 0.6,
+        legend.text = c("2019", "2020", "2023", "2024"),
+        args.legend = list(x = "topright"))
+
+barplot(height = rbind(table(M19_2$p5), table(M20_2$p5), table(M23_2$p5), table(M24_2$p5)),
+        beside = TRUE,
+        names.arg = c('No respondió', 'Por trabajo',
+'Por estudio',
+'Por cultura general',
+'Por gusto o entretenimiento',
+'Por religión',
+'Otro'),
+        main = "¿Motivo principal de lectura?", 
+        xlab = "", 
+        ylab = "# Respuestas",
+        col = c("lightblue", "darkblue", "orange", "darkred"), 
+        border = "black",
+        las = 2,
+        cex.names = 0.4,
+        legend.text = c("2019", "2020", "2023", "2024"),
+        args.legend = list(x = "topright"))
+
+barplot(height = rbind(table(M19_2$p26), table(M20_2$p26), table(M23_2$p26), table(M24_2$p26)),
+        beside = TRUE,
+        main = "Minutos de lectura en aproximación", 
+        xlab = "Minutos leídos", 
+        ylab = "Minutos",
+        col = c("lightblue", "darkblue", "orange", "darkred"), 
+        border = "black",
+        cex.names = 0.4,
+        legend.text = c("2019", "2020", "2023", "2024"),
+        args.legend = list(x = "topright"))
+
+barplot(height = rbind(table(M19_2$p32), table(M20_2$p32), table(M23_2$p32), table(M24_2$p32)),
+        beside = TRUE,
+        names.arg = c('No respondió', 'Falta de interés o gusto',
+'Preferencia de otras actividades',
+'Por falta de tiempo',
+'Por falta de dinero',
+'Por problemas de salud',
+'Otro'),
+        main = "¿Motivo principal para no leer?", 
+        xlab = "", 
+        ylab = "# Respuestas",
+        col = c("lightblue", "darkblue", "orange", "darkred"), 
+        border = "black",
+        las = 2,
+        cex.names = 0.4,
+        legend.text = c("2019", "2020", "2023", "2024"),
+        args.legend = list(x = "topright"))
+
+barplot(height = rbind(table(M19_2$p34_4), table(M20_2$p34_4), table(M23_2$p34_4), table(M24_2$p34_4)),
+        beside = TRUE,
+        names.arg = c("No respondió", "Sí", "No", "No lo recuerda"),
+        main = "¿De niño(a), había libros en su casa?", 
+        xlab = "", 
+        ylab = "# Respuestas",
+        col = c("lightblue", "darkblue", "orange", "darkred"), 
+        border = "black",
+        legend.text = c("2019", "2020", "2023", "2024"),
+        args.legend = list(x = "topright"))
+
+boxplot(M19_2$p4, M20_2$p4, M23_2$p4, M24_2$p4,
+        main = "Box and Whiskers Plot - Frecuencia de libros leídos",
+        xlab = "Años",
+        ylab = "Frecuencia de libros leídos",
+        names = c("2019", "2020", "2023", "2024"),
+        col = c("lightblue", "darkblue", "orange", "darkred"),
+        border = "black")
+
+get_mode <- function(v) {
+  uniq_v <- unique(v)
+  uniq_v[which.max(tabulate(match(v, uniq_v)))]
+}
+
+frecuencia_libros <- list(
+  "2019" = M19_2$p4,
+  "2020" = M20_2$p4,
+  "2023" = M23_2$p4,
+  "2024" = M24_2$p4
+)
+
+estadisticas <- data.frame(
+  Año = names(frecuencia_libros),
+  Media = sapply(frecuencia_libros, mean, na.rm = TRUE),
+  Mediana = sapply(frecuencia_libros, median, na.rm = TRUE),
+  Moda = sapply(frecuencia_libros, get_mode),
+  Rango = sapply(frecuencia_libros, function(x) max(x, na.rm = TRUE) - min(x, na.rm = TRUE)),
+  Cuartil_Inferior = sapply(frecuencia_libros, quantile, probs = 0.25, na.rm = TRUE),
+  Cuartil_Superior = sapply(frecuencia_libros, quantile, probs = 0.75, na.rm = TRUE)
+)
+
+print(estadisticas)
+
+
+frecuencia_libros <- list(
+  "2019" = M19_2$p4[M19_2$p4 > 0],
+  "2020" = M20_2$p4[M20_2$p4 > 0],
+  "2023" = M23_2$p4[M23_2$p4 > 0],
+  "2024" = M24_2$p4[M24_2$p4 > 0]
+)
+
+estadisticascero <- data.frame(
+  Año = names(frecuencia_libros),
+  Media = sapply(frecuencia_libros, mean, na.rm = TRUE),
+  Mediana = sapply(frecuencia_libros, median, na.rm = TRUE),
+  Moda = sapply(frecuencia_libros, get_mode),
+  Rango = sapply(frecuencia_libros, function(x) max(x, na.rm = TRUE) - min(x, na.rm = TRUE)),
+  Cuartil_Inferior = sapply(frecuencia_libros, quantile, probs = 0.25, na.rm = TRUE),
+  Cuartil_Superior = sapply(frecuencia_libros, quantile, probs = 0.75, na.rm = TRUE)
+)
+
+print(estadisticascero)
+
+```
+
+
+
+
+
+
+
+```{r}
+# Funcion de grafico de pastel
+crear_grafico_pastel_base <- function(datos, titulo) {
+  # contar numero de respuestas
+  conteo <- table(datos[datos != 0])
+  
+  etiquetas <- c("Falta de interés", "Otras actividades", "Falta de tiempo", 
+                 "Falta de dinero", "Problemas de salud", "Otro")
+  
+  # Crear gráfico de pastel
+  pie(conteo, labels = etiquetas, main = titulo, col = rainbow(length(conteo)))
+}
+
+
+crear_grafico_pastel_base(M19_2$p32, "Razones por las que no leen (2019)")
+crear_grafico_pastel_base(M20_2$p32, "Razones por las que no leen (2020)")
+crear_grafico_pastel_base(M23_2$p32, "Razones por las que no leen (2023)")
+crear_grafico_pastel_base(M24_2$p32, "Razones por las que no leen (2024)")
+
+# Grafico tomando en cuenta todos los datos
+datos_combinados <- c(M19_2$p32, M20_2$p32, M23_2$p32, M24_2$p32)
+crear_grafico_pastel_base(datos_combinados, "Razones por las que no leen (Todos los años)")
+
+```
+

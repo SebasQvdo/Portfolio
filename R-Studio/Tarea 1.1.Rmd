@@ -1,0 +1,240 @@
+---
+title: "Tarea 1 - Problemas de Repaso"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-06-10"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Problema “Cálculos de Probabilidad Condicionada”
+```{r}
+# Datos proporcionados
+P_A <- 0.2
+P_B <- 0.4
+P_A_inter_B <- 0.03
+# a) Probabilidad de que ocurra A, dado que ya ocurrió B
+P_A_given_B <- P_A_inter_B / P_B
+cat(sprintf("a) P(A dado B): %.3f\n", P_A_given_B))
+# b) Probabilidad de que ocurra B, dado que ya ocurrió A
+P_B_given_A <- P_A_inter_B / P_A
+cat(sprintf("b) P(B dado A): %.4f\n", P_B_given_A))
+# c) Probabilidad de que ocurra A, dado que B no ocurrió
+P_not_B <- 1 - P_B
+P_A_inter_not_B <- P_A - P_A_inter_B
+P_A_given_not_B <- P_A_inter_not_B / P_not_B
+cat(sprintf("c) P(A dado no B): %.4f\n", P_A_given_not_B))
+# d) Probabilidad de que no ocurra A, dado que B ya ocurrió
+P_not_A_given_B <- 1 - P_A_given_B
+cat(sprintf("d) P(no A dado B): %.3f\n", P_not_A_given_B))
+# e) Probabilidad de que no ocurra A, dado que B no ocurrió
+P_not_A_given_not_B <- 1 - P_A_given_not_B
+cat(sprintf("e) P(no A dado no B): %.4f\n", P_not_A_given_not_B))
+```
+
+
+# Problema “Gente que Fuma”
+```{r}
+# Datos de la tabla de contingencia
+hombres_fuman <- 200
+hombres_no_fuman <- 135
+mujeres_fuman <- 80
+mujeres_no_fuman <- 238
+# Cálculos de totales
+total_hombres <- hombres_fuman + hombres_no_fuman
+total_mujeres <- mujeres_fuman + mujeres_no_fuman
+total_fumadores <- hombres_fuman + mujeres_fuman
+total_no_fumadores <- hombres_no_fuman + mujeres_no_fuman
+total_personas <- total_hombres + total_mujeres
+# Probabilidades
+p_hombre <- total_hombres / total_personas
+p_mujer_no_fuma <- mujeres_no_fuman / total_personas
+p_fuma_dado_hombre <- hombres_fuman / total_hombres
+p_hombre_o_fuma <- (total_hombres + total_fumadores - hombres_fuman) / total_personas
+# Imprimir resultados con el formato requerido
+cat(sprintf("a) Probabilidad de que sea hombre: %.4f\n", p_hombre))
+cat(sprintf("b) Probabilidad de que sea mujer y no fume: %.4f\n", p_mujer_no_fuma))
+cat(sprintf("c) Probabilidad de que fume, si se sabe que es hombre: %.4f\n", p_fuma_dado_hombre))
+cat(sprintf("d) Probabilidad de que sea hombre, o bien, fume: %.4f\n", p_hombre_o_fuma))
+```
+
+
+# Problema “Billetes”
+```{r}
+# Definición de las cantidades iniciales de billetes por denominación
+billetes_100 <- 24
+billetes_200 <- 10
+billetes_500 <- 12
+billetes_1000 <- 19
+# Total de billetes inicialmente
+total_billetes <- billetes_100 + billetes_200 + billetes_500 + billetes_1000
+# Cálculo de la probabilidad de extraer un billete de $200 después de haber extraído uno de $500
+P_D2_given_Q1 <- billetes_200 / total_billetes
+# Imprimir la probabilidad redondeada a cuatro decimales
+print(sprintf("La probabilidad de que el segundo billete sea de $200 dado que el primero fue de $500 es: %.4f", P_D2_given_Q1))
+
+P_M2 <- (56 / 183)^2
+P_Q1_given_M2 <- 35 / 183
+P_Q1_and_M2 <- P_Q1_given_M2
+P_Q1_and_M2
+```
+
+
+# Problema “Robots”
+```{r}
+# Proporciones y probabilidades de defecto de cada robot
+p_defecto_A <- 0.003
+p_defecto_B <- 0.05
+p_defecto_C <- 0.002
+prop_A <- 0.40
+prop_B <- 0.18
+prop_C <- 0.42
+# a) Probabilidad total de defecto
+p_defecto_total <- p_defecto_A * prop_A + p_defecto_B * prop_B + p_defecto_C * prop_C
+# Costo de reciclaje por artículo defectuoso
+costo_reciclaje <- 2.9
+# Costo esperado para 100,000 piezas
+costo_esperado <- 100000 * p_defecto_total * costo_reciclaje
+# b) Probabilidad de que un artículo defectuoso haya sido soldado por el robot B ( P(B | Defecto) )
+p_B_dado_defecto <- (p_defecto_B * prop_B) / p_defecto_total
+
+print(sprintf("a) El costo esperado por artículos defectuosos en un lote de 100,000 piezas es: %.2f pesos", costo_esperado))
+print(sprintf("b) La probabilidad de que un artículo defectuoso haya sido soldado por el robot B es: %.4f", p_B_dado_defecto))
+```
+
+
+# Problema “Intervalo de Z para el 99% de la Población”
+## Introducción:
+Este documento calcula los valores de Z que contienen al 99% de la población en una distribución normal estándar. El objetivo es encontrar los puntos en los cuales el área central acumulada bajo la curva de la distribución normal es igual al 99%.
+
+## Cálculo de los Valores Críticos de Z:
+Utilizamos la función qnorm en R, que nos permite encontrar los cuantiles de la distribución normal estándar. Para un intervalo de confianza del 99%, queremos encontrar los valores de Z que corresponden al 0.5% y 99.5% de la distribución, ya que esto nos dará los valores en los extremos del 99% central.
+```{r}
+# Define los niveles de cola para un 99% de confianza
+lower_tail <- 0.005
+upper_tail <- 0.995
+# Encuentra los valores críticos de Z para el 99% central
+z_lower <- qnorm(lower_tail)
+z_upper <- qnorm(upper_tail)
+# Muestra los valores de Z
+z_lower
+z_upper
+```
+
+
+# Problema “Cálculo de Probabilidades para una Variable Normal”
+## Cálculos de Probabilidad:
+Usamos la función pnorm de R para calcular las probabilidades acumuladas y específicas bajo la curva normal.
+```{r}
+# Definir parámetros de la distribución normal
+mu <- 11.0
+sigma <- 1.50
+# Probabilidad de que X sea menor o igual a 11
+p_less_11 <- pnorm(11, mean = mu, sd = sigma)
+# Probabilidad de que X esté entre 9 y 14
+p_between_9_14 <- pnorm(14, mean = mu, sd = sigma) - pnorm(9, mean = mu, sd = sigma)
+# Probabilidad de que X sea mayor a 10
+p_greater_10 <- 1 - pnorm(10, mean = mu, sd = sigma)
+# Imprimir resultados
+p_less_11
+p_between_9_14
+p_greater_10
+```
+
+
+# Problema ”Ajuste de la Máquina Distribuidora de Café”
+## Introducción:
+Este análisis determina el ajuste óptimo para una máquina distribuidora de café para minimizar los desbordamientos. Asumimos que el volumen de café servido sigue una distribución normal.
+
+## Parámetros de la Distribución:
+El volumen del vaso es de 0.33 litros y queremos que el desbordamiento ocurra en menos del 1% de los casos.
+```{r}
+# Parámetros conocidos
+volumen_vaso <- 0.33
+desviacion_estandar <- 0.005
+probabilidad_desborde <- 0.01
+# Calcular el cuantil que corresponde al 99% (1 - 0.01)
+z <- qnorm(0.99)
+# Calcular el valor medio μ necesario
+mu <- volumen_vaso - z * desviacion_estandar
+mu
+```
+
+
+# Problema “Proporción de Estudiantes Dotados”
+## Introducción:
+Este documento determina la proporción de estudiantes universitarios que tienen un C.I. de 120 o más. La distribución del C.I. de los universitarios se asume normal con una media de 107 y una desviación estándar de 15.
+
+## Cálculo de Probabilidades:
+La desviación estándar se calcula como la raíz cuadrada de la varianza.
+```{r}
+# Definir los parámetros de la distribución normal
+media <- 107
+varianza <- 225
+desviacion_estandar <- sqrt(varianza)
+# Calcular la probabilidad de que un estudiante tenga un C.I. de 120 o más
+p_dotados <- 1 - pnorm(120, mean = media, sd = desviacion_estandar)
+p_dotados
+```
+
+
+# Problema “Probabilidad de Recepción de Revistas”
+## Introducción:
+Este documento calcula la probabilidad de una compañía que ha planeado presentaciones de ventas a una docena (12) de clientes importantes. La probabilidad de recibir un pedido como un resultado de tal presentación se estima en 75%. ¿Cuál es la probabilidad de recibir siete o más pedidos como resultado de las reuniones?
+
+## Cálculo de Probabilidades:
+Utilizamos la función pbinom para calcular la probabilidad acumulativa de una distribución binomial con parámetros size = 12 y prob = 0.75.
+```{r}
+# Definir los parámetros de la distribución binomial
+n <- 12
+p <- 0.75
+# Calcular la probabilidad de que al menos siete pedidos vengan de reuniones
+probabilidad <- 1 - pbinom(6, size = n, prob = p)
+# pbinom da P(X <= k), por lo que 1 - P(X <= 6) da P(X >= 7)
+probabilidad
+```
+
+
+# Problema “Análisis de Riesgo de Ventas”
+## Contexto:
+Se evalúa el riesgo de que un agente de ventas, que visita 30 clientes por semana y tiene una probabilidad de 0.34 de realizar un pedido en cada visita, enfrente problemas económicos al no conseguir al menos 10 pedidos.
+
+## Cálculo de Probabilidades:
+Utilizando la distribución binomial, se calcula la probabilidad de que el agente tenga menos de 10 pedidos, lo cual indicaría problemas económicos:
+```{r}
+# Parámetros de la distribución binomial
+n <- 30
+p <- 0.34
+# Calculando la probabilidad de tener menos de 10 pedidos
+probabilidad_problemas <- pbinom(9, size = n, prob = p)
+probabilidad_problemas
+```
+
+
+# Problema “Análisis de Variación en Datos de Bomberos”
+## Introducción:
+Este análisis evalúa qué conjunto de datos entre consumo de oxígeno, tiempo de reacción y pulso de bomberos muestra mayor variabilidad durante un simulacro de supresión de incendios.
+
+## Metodología:
+Se utiliza el coeficiente de variación, que es la desviación estándar dividida por la media del conjunto de datos, multiplicada por 100 para expresarla en porcentaje. Este coeficiente permite comparar la dispersión de conjuntos de datos que podrían tener diferentes unidades de medida o medias.
+
+## Datos:
+Los datos consisten en mediciones de consumo de oxígeno, tiempo de reacción y pulso, recogidos de un grupo de bomberos durante un simulacro.
+```{r}
+oxigeno <- c(29.5, 49.3, 30.6, 28.2, 28, 26.3, 33.9, 29.4, 23.5, 31.6)
+tiempo <- c(8.1, 6.3, 3.1, 9.6, 4.3, 2.6, 5.4, 9.2, 8.3, 1.2)
+pulso <- c(60.3, 70.2, 80.3, 90.4, 60.2, 80.9, 73.1, 80.9, 66.4, 70.9)
+coef_var_oxigeno <- (sd(oxigeno) / mean(oxigeno)) * 100
+coef_var_tiempo <- (sd(tiempo) / mean(tiempo)) * 100
+coef_var_pulso <- (sd(pulso) / mean(pulso)) * 100
+coef_var_oxigeno
+coef_var_tiempo
+coef_var_pulso
+```
+
+
+
+

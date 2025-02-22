@@ -1,0 +1,44 @@
+---
+title: "Actividad 6"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-05-31"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## El problema de botellas
+Se trata de una variable continua X sobre el llenado de una botella.
+```{r}
+media = 320 # ml, de población
+varianza = 0.004 # ml^2
+desv = sqrt(varianza) # Desv estándar de población ml
+# P(X > 320.2)
+1-pnorm(320.2, media, desv)
+```
+Significa que 7 de cada 10,000 botellas se esperan (en promedio) corran riesgo de romperse.
+
+## b)
+```{r}
+media_xbarra = 320 # es igual a la media de población de individuos
+n = 20
+error_estandar = desv / sqrt(n)
+x1 = qnorm(0.025, media_xbarra, error_estandar)
+x2 = qnorm(1 - 0.025, media_xbarra, error_estandar)
+cat("[",x1,",",x2,"]")
+```
+Fuera de este intervalo, el ingeniero rechazará el pedido.
+
+## c) De hecho el ingeniero en una muestra de tamaño 20 obtuvo una media de 319.7
+
+
+
+
+
+
+
+
+
+

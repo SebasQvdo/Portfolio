@@ -1,0 +1,139 @@
+---
+title: "Actividad 8"
+author: "Sebastián Quevedo - A01722937"
+date: "2024-06-07"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## El problema de los enlatados
+```{r}
+datos = c(11.0, 11.6, 10.9, 12, 11.5, 12, 11.2, 10.5, 12.2, 11.8, 12.1, 11.6, 11.7, 11.6, 11.2, 12, 11.4, 10.8, 11.8, 10.9, 11.4)
+# Intervalo de confianza
+media = mean(datos) # media de muestra
+n = length(datos)    # tamaño muestra
+s = sd(datos)         # desv. estándar muestra
+NC = 0.95              # nivel de confianza
+alfa = 1 - NC           # nivel de significación
+t = abs(qt(alfa/2, n-1)) # coef. de confianza
+ee = s/sqrt(n)          # error estándar
+E = t*ee               # error estadístico (error máximo)
+Linf = media - E      # límite inferior
+Lsup = media + E     # límite superior
+cat("[", Linf, ",", Lsup, "] al", NC*100, "% de confianza")
+```
+Observación: 11.4 (el promedio anterior) está dentro del intervalo. Se mantiene el mismo promedio.
+
+# B) Prueba de hipótesis
+## Hipótesis
+Ho: Media_pobl = 11.4
+H1: Media_pobl > 11.4
+alfa = 0.05
+## Modelo de probabilidad
+¿Z o T?
+Sigma desconocida (desv. estándar pobl) y n < 30 y Normalidad
+--> T
+## Regla de decisión
+**Regla valor p**: Si valor p < (alfa = 0.05), se rechaza Ho.
+
+**Regla clásica con Z**: Si T* > Tf (valor frontera), se rechaza Ho.
+```{r}
+Tf = qt(1-alfa, n-1)
+```
+## Estadístico de prueba T* (Tp)
+```{r}
+media_pobl = 11.4
+ee = s/sqrt(n)
+Tp = (media - media_pobl) / (ee)
+cat("T* =", Tp)
+```
+## Conclusión
+Como T* = 0.82 < Tf = 1.72 entonces T* está en zona de aceptación, por tanto, no se rechaza Ho.
+
+## Valor p
+```{r}
+cat("Valor p =", 1 - pt(Tp, n-1))
+```
+Conclusión: como valor p = 0.20 > alfa = 0.05, no se rechaza Ho.
+
+
+# Situación problema
+
+## Los datos
+
+```{r}
+M = read.csv("datosG10Eq04.csv")
+```
+
+## Descripción de la base datos
+```{r}
+str(M)
+```
+Se trata de 126 observaciones (renglones) con 22 variables (columnas)
+Se observa una variable categórica (entidad) y el resto numéricas (sin contar X)
+
+¿Qué vamos a investigar?
+Energías fósil vs PIB per cápita
+
+Seleccionar las variables:
+
+```{r}
+names(M)
+M2 = M[ , c(2, 5, 9, 11, 12, 18, 20) ] # condición renglones, condición columnas (si con , )
+```
+## Regiones de la base de datos
+```{r}
+#table(M2$entidad)
+Europa_Central = c("France", "Austria", "Finland")
+region = ifelse(M2$entidad %in% Europa_Central, "R1", "R2")
+M2 = cbind(region, M2)
+M3 = M2[-2] # quita la columna 2
+names(M3)
+```
+```{r}
+R1 = M3[M3$region == "R1", ][-1]
+#head(R1)
+#names(R1)
+R2 = M3[M3$region == "R2", ][-1]
+```
+
+# Análisis de medidas resumen de R1, R2
+```{r}
+summary(R1)
+```
+
+```{r}
+par(cex = 0.7) # disminuye letra etiquetas
+par(las = 3) # voltear las etiquetas
+boxplot(R1, main = "R1", col = terrain.colors(10))
+plot(R1, col = "turquoise3")
+par(mfrow = c(2, 3)) # matriz gráficos c(renglón, columna)
+hist(R1$acceso_combust_limpios, col = terrain.colors(15))
+hist(R1$electrd_fosiles, col = rainbow(10))
+hist(R1$electrd_de_energ_renov, col = terrain.colors(6))
+hist(R1$electrd_de_f_bajas_carb, col = rainbow(12))
+hist(R1$PIB_per_cap, col = terrain.colors(8))
+hist(R1$superficie, col = rainbow(15))
+```
+## Matriz de correlaciones
+```{r}
+round(cor(R1), 2)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
