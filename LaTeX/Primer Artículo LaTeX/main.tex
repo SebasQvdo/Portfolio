@@ -1,0 +1,166 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{booktabs} 
+\usepackage{apacite}
+\bibliographystyle{apacite}
+\usepackage{multicol, caption}
+\setlength{\columnsep}{1cm}
+
+
+\title{Primer Artículo LaTeX}
+\author{Sebastián Quevedo}
+\date{11 Septiembre 2024}
+
+\begin{document}
+
+\maketitle
+
+\begin{multicols}{2}
+
+\section{Introduction}
+\subsection{Símbolos y caracteres especiales}
+
+- Uso de comillas:
+
+\noindent Comillas simples `texto’ produce ´texto´
+
+\noindent Comillas dobles ``texto’’ produce “texto”
+
+
+\noindent - Algunos caracteres especiales:
+
+\noindent \%: comentarios
+
+\noindent \#: argumentos de entrada
+
+\noindent \&: separador de tabulaciones, para tablas
+
+\noindent \$: matemáticas en línea
+
+\noindent Para escribir alguno de estos caracteres especiales debe anteceder un /, por ejemplo /\$ produce \$
+
+\columnbreak
+
+\subsection{Ecuaciones}
+El primer grupo en ese momento correspondía al que desde los años setenta fue ''bautizado'' como grupo Sudamericano, y que algunoantioqueño, con varios s llamaban el Sindicato Antioqueño y otros el Grupo Empresarial \$11.500 millones de dólares La ley de Ohm para resistencia dice $R=V/I$
+
+\begin{equation}
+     \int_{-\infty}^\infty e^{-x^2} \mathrm{d}x
+\end{equation}
+
+\begin{equation}
+    \phi = \int E \mathrm{d}A = \Delta V
+\end{equation}
+
+\noindent - Utilice \^- para superíndices y \_ para subíndices
+
+\noindent - Utilice corchetes \{ \} para escribir superíndices o subíndices grandes
+
+\noindent \$a\_n = a\_n-2\$  \ \    \%error
+
+\noindent \$a\_n = a\_\{n-1\} + a\_\{n-2\}\$  \ \  \%correcto
+
+\noindent \$f(x) = e\^-\{ax+b\} - c\$
+
+\end{multicols}
+
+
+\newpage
+\section{Métodos}
+
+\subsection{Listas}
+
+Ejemplo 1:
+\begin{enumerate}
+\item Equipo 1
+\item Equipo 2
+\item Equipo 3
+\end{enumerate}
+
+\noindent Ejemplo 2:
+\begin{itemize}
+    \item Equipo 1
+    \item Equipo 2
+    \item Equipo 3
+\end{itemize}
+
+
+
+\newpage
+\subsection{Imágenes y Tablas}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[width=0.5\linewidth]{iphi.jpg}
+    \end{center}
+    \caption{Aqu\'{i} se muestra un logo de la carrera}
+    \label{fig:Logo}
+\end{figure}
+
+Otra figura:
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+\begin{Figure}
+    \centering
+    \includegraphics[width=\linewidth]{iphi.jpg}
+    \captionof{figure}{Grano de maíz (Kent-Jones y Singh, 2024)}
+\end{Figure}
+
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Uno & Dos & Tres \\
+\midrule
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{tabular}
+\end{center}
+\caption{Mi primera tabla}
+\end{table}
+
+
+
+\newpage
+\section{Bibliografía}
+\subsection{Extensión .bib}
+1. Crear nuevo archivo
+
+\noindent 2. Con extensión .bib
+
+- Ejemplo: referencias.bib
+
+\noindent 3. Por ultimo, utilizar:
+
+- /cite\{nombre del archivo\}
+
+- /bibliographystyle\{apacite\} o /bibliographystyle\{plain\}
+
+
+\subsection{Con formato APA}
+1. Usar formato APA
+
+\noindent 2. Antes de iniciar:
+
+- /usepackage\{apacite\}
+
+- /usepackage\{natbib\}
+
+\noindent 3. Para que aparezca en el texto, manda:
+
+- llamar al archivo creado: /bibliography\{referencias\}
+
+
+\subsubsection{Referencias}: 
+
+
+\cite{ref1, ref2, ref3, ref4}
+\bibliography{referencias}
+
+
+
+\end{document}
+
