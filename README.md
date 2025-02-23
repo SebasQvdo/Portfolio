@@ -1,2 +1,2 @@
-# Portafolio
-Todos los proyectos, ejercicios, tareas y problemas de código a través de los años
+# Portfolio
+All of my projects, exercises, homework, and more
