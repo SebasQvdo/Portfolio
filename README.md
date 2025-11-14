@@ -1,2 +1,2 @@
 # Portfolio
-All of my projects, exercises, homework, and more
+All of my projects and practice in coding over the years.
